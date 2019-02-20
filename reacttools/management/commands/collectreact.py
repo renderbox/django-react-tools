@@ -8,6 +8,7 @@
 import os
 import subprocess
 import json
+import fileinput
 
 from django.core.management.base import BaseCommand
 # from django.contrib.staticfiles.storage import staticfiles_storage
@@ -19,6 +20,7 @@ REACT_BUILD_DIRECTORY = os.path.join(REACT_PROJECT_DIRECTORY, "build")
 REACT_BUILD_COMMAND = "yarn build"
 REACT_FILE_TYPES = ['js', 'css', 'svg']
 REACT_DJANGO_DEST = settings.STATIC_ROOT
+REACT_INCLUDE_MAP_FILES = 'map' in REACT_FILE_TYPES
 
 class Command(BaseCommand):
 
@@ -75,6 +77,27 @@ class Command(BaseCommand):
                 dest = self.destination_path(relative_value) 
 
                 print("Copying: %s -> %s" % (source, dest) )
+                # Copy the files here and overwrite the old files
+                # modify any text files here
+
+                # Check the destination folder exists
+                dest_folder = os.path.dirname(dest)
+
+                if not os.path.isdir(dest_folder):
+                    os.mkdir(dest_folder)
+
+                # Check to see if this is a file type that should be edited
+                # if source.split(".")[-1] not in ['js', 'css', 'map']:
+                subprocess.run("cp %s %s" % (source, dest), shell=True)
+                # else:
+                #     with open(source, 'r') as file :
+                #         filedata = file.read()
+
+                #     # filedata = filedata.replace('ram', 'abcd')    # Do this for each 
+
+                #     with open(dest, 'w') as file:
+                #         file.write(filedata)
+            
                 
     def destination_path(self, file_path):
 
@@ -83,6 +106,21 @@ class Command(BaseCommand):
         if path_parts[0] == "static":
             path_parts.pop(0)
 
+        path_parts[-1] = self.clean_name(path_parts[-1])
+
+        # FORCE FILES TO BE IN APROPRIATE DIRECTORIES? (for example: 'service-worker.js', 'precache-manifest.js' default to static root)
+
         result = os.path.abspath(os.path.join( REACT_DJANGO_DEST, *path_parts ))
 
         return result
+
+    def clean_name(self, file_name):
+
+        parts = file_name.split(".")
+
+        if len(parts) > 2:
+            junk = parts.pop(1)
+            if self.debug:
+                print("Removing '%s' from '%s'" % (junk, file_name) )
+
+        return ".".join(parts)
