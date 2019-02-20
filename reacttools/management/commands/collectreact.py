@@ -67,5 +67,22 @@ class Command(BaseCommand):
             manifest = json.load(json_file)
 
         for key, value in manifest.items():
+
             if key.split(".")[-1] in REACT_FILE_TYPES:
-                print(key)
+                # print(key)
+                relative_value = value[1:]
+                source = os.path.abspath(os.path.join( REACT_BUILD_DIRECTORY, relative_value ))
+                dest = self.destination_path(relative_value) 
+
+                print("Copying: %s -> %s" % (source, dest) )
+                
+    def destination_path(self, file_path):
+
+        # Pop static
+        path_parts = file_path.split("/")
+        if path_parts[0] == "static":
+            path_parts.pop(0)
+
+        result = os.path.abspath(os.path.join( REACT_DJANGO_DEST, *path_parts ))
+
+        return result
