@@ -11,16 +11,16 @@ import json
 import fileinput
 
 from django.core.management.base import BaseCommand
-# from django.contrib.staticfiles.storage import staticfiles_storage
+# from django.contrib.staticfiles.storage import staticfiles_storage    # For future use
 # from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
-REACT_PROJECT_DIRECTORY = os.path.join(settings.BASE_DIR, "..", "react-test-app")
-REACT_BUILD_DIRECTORY = os.path.join(REACT_PROJECT_DIRECTORY, "build")
-REACT_BUILD_COMMAND = "yarn build"
-REACT_FILE_TYPES = ['js', 'css', 'svg']
-REACT_DJANGO_DEST = settings.STATIC_ROOT
-REACT_INCLUDE_MAP_FILES = 'map' in REACT_FILE_TYPES
+REACT_PROJECT_DIRECTORY = getattr(settings, 'REACT_PROJECT_DIRECTORY', os.path.join(settings.BASE_DIR, "..", "react-test-app"))
+REACT_BUILD_DIRECTORY = getattr(settings, 'REACT_BUILD_DIRECTORY', os.path.join(REACT_PROJECT_DIRECTORY, "build"))
+REACT_BUILD_COMMAND = getattr(settings, 'REACT_BUILD_COMMAND', "yarn build")
+REACT_FILE_TYPES = getattr(settings, 'REACT_FILE_TYPES', ['js', 'css', 'svg'])
+REACT_DJANGO_DEST = getattr(settings, 'REACT_DJANGO_DEST', settings.STATIC_ROOT)
+REACT_INCLUDE_MAP_FILES = getattr(settings, 'REACT_INCLUDE_MAP_FILES', 'map' in REACT_FILE_TYPES)
 
 class Command(BaseCommand):
 
@@ -120,6 +120,7 @@ class Command(BaseCommand):
 
         if len(parts) > 2:
             junk = parts.pop(1)
+
             if self.debug:
                 print("Removing '%s' from '%s'" % (junk, file_name) )
 
