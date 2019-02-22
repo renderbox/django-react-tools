@@ -21,6 +21,8 @@ REACT_BUILD_COMMAND = getattr(settings, 'REACT_BUILD_COMMAND', "yarn build")
 REACT_FILE_TYPES = getattr(settings, 'REACT_FILE_TYPES', ['js', 'css', 'svg'])
 REACT_DJANGO_DEST = getattr(settings, 'REACT_DJANGO_DEST', settings.STATIC_ROOT)
 REACT_INCLUDE_MAP_FILES = getattr(settings, 'REACT_INCLUDE_MAP_FILES', 'map' in REACT_FILE_TYPES)
+REACT_FILE_PREFIX = getattr(settings, 'REACT_FILE_PREFIX', None)
+REACT_INCLUDED_NON_STATIC = getattr(settings, 'REACT_INCLUDED_NON_STATIC', False)
 
 class Command(BaseCommand):
 
@@ -74,7 +76,10 @@ class Command(BaseCommand):
                 # print(key)
                 relative_value = value[1:]
                 source = os.path.abspath(os.path.join( REACT_BUILD_DIRECTORY, relative_value ))
-                dest = self.destination_path(relative_value) 
+                dest = self.destination_path(relative_value)
+
+                if dest == None:    # If the destination is not valid, it will return None
+                    continue
 
                 print("Copying: %s -> %s" % (source, dest) )
                 # Copy the files here and overwrite the old files
@@ -100,13 +105,24 @@ class Command(BaseCommand):
             
                 
     def destination_path(self, file_path):
+        '''
+        Returns the destination path or None.  If it's None, that means 
+        the path is invalid and should be skipped.
+        '''
 
         # Pop static
         path_parts = file_path.split("/")
+
         if path_parts[0] == "static":
             path_parts.pop(0)
+        else:
+            if not REACT_INCLUDED_NON_STATIC:
+                return None
 
         path_parts[-1] = self.clean_name(path_parts[-1])
+
+        if REACT_FILE_PREFIX:
+            path_parts[-1] = REACT_FILE_PREFIX + path_parts[-1]
 
         # FORCE FILES TO BE IN APROPRIATE DIRECTORIES? (for example: 'service-worker.js', 'precache-manifest.js' default to static root)
 
