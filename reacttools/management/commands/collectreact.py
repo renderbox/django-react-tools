@@ -61,8 +61,8 @@ class Command(BaseCommand):
         if self.nobuild:
             print("Skipping Build")
         else:
-            print("Building React Project")
-            completed = subprocess.run("yarn build", shell=True, cwd=REACT_PROJECT_DIRECTORY)
+            print("Building React Project: '%s'" % REACT_BUILD_COMMAND)
+            completed = subprocess.run(REACT_BUILD_COMMAND, shell=True, cwd=REACT_PROJECT_DIRECTORY)
             print('returncode:', completed.returncode)
 
         asset_manifest = os.path.join(REACT_BUILD_DIRECTORY, "asset-manifest.json")
