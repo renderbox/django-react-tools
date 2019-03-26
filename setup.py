@@ -5,7 +5,7 @@
 # --------------------------------------------
 
 from os import path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 file_path = path.abspath(path.dirname(__file__))
 with open(path.join(file_path, 'README.md'), encoding='utf-8') as f:
@@ -13,7 +13,7 @@ with open(path.join(file_path, 'README.md'), encoding='utf-8') as f:
 
 package_metadata = {
     'name': 'django-react-tools',
-    'version': '0.1.1',
+    'version': '0.1.2',
     'description': 'Tools for helping integrate ReactJS into a Django project.',
     'long_description': long_description,
     'url': 'https://github.com/renderbox/django-react-tools',
@@ -33,7 +33,7 @@ package_metadata = {
 
 setup(
     **package_metadata,
-    packages=['reacttools'],
+    packages=find_packages(),
     python_requires=">=3.6",
     install_requires=[
         'Django>=2.1.5',
