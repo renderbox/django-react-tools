@@ -33,6 +33,15 @@ Django project. You can change it by modifying the setting variable.
 
    REACT_DJANGO_DEST = settings.STATIC_ROOT
 
+The default React Manifest file is set to "asset-manifest.json".  If you are 
+using a newer version of React (16.8+) you will want to change this value to 
+"manifest.json" in your settings.py file.
+
+.. code:: python
+
+   REACT_MANIFEST_FILE = "asset-manifest.json"
+
+
 To run all you need to do is call the management command.
 
 .. code:: bash

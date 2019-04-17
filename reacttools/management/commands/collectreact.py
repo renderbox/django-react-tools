@@ -15,6 +15,9 @@ from django.core.management.base import BaseCommand
 # from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
+
+# Settings Variables
+
 REACT_PROJECT_DIRECTORY = getattr(settings, 'REACT_PROJECT_DIRECTORY', os.path.join(settings.BASE_DIR, "..", "react-test-app"))
 REACT_BUILD_DIRECTORY = getattr(settings, 'REACT_BUILD_DIRECTORY', os.path.join(REACT_PROJECT_DIRECTORY, "build"))
 REACT_BUILD_COMMAND = getattr(settings, 'REACT_BUILD_COMMAND', "yarn build")
@@ -23,6 +26,8 @@ REACT_DJANGO_DEST = getattr(settings, 'REACT_DJANGO_DEST', settings.STATIC_ROOT)
 REACT_INCLUDE_MAP_FILES = getattr(settings, 'REACT_INCLUDE_MAP_FILES', 'map' in REACT_FILE_TYPES)
 REACT_FILE_PREFIX = getattr(settings, 'REACT_FILE_PREFIX', None)
 REACT_INCLUDED_NON_STATIC = getattr(settings, 'REACT_INCLUDED_NON_STATIC', False)
+REACT_MANIFEST_FILE = getattr(settings, 'REACT_MANIFEST_FILE', "asset-manifest.json")
+
 
 class Command(BaseCommand):
 
@@ -65,7 +70,7 @@ class Command(BaseCommand):
             completed = subprocess.run(REACT_BUILD_COMMAND, shell=True, cwd=REACT_PROJECT_DIRECTORY)
             print('returncode:', completed.returncode)
 
-        asset_manifest = os.path.join(REACT_BUILD_DIRECTORY, "asset-manifest.json")
+        asset_manifest = os.path.join(REACT_BUILD_DIRECTORY, REACT_MANIFEST_FILE)
         
         with open(asset_manifest) as json_file:  
             manifest = json.load(json_file)
