@@ -142,6 +142,10 @@ class ReactProxyMixin(object):
 # VIEWS
 #--------------
 
+class IndexView(ReactProxyMixin, TemplateView):
+    template_name = "reacttools/index.html"
+
+
 def proxy(request, path):
     '''
     Based on the guide from Aymeric Augustin
