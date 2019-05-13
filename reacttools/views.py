@@ -8,10 +8,14 @@ from django.shortcuts import render
 from django.template import engines
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
-REACT_DEV_MODE = getattr(settings, 'REACT_DEV_MODE', True)
+from html.parser import HTMLParser
+
+REACT_DEV_MODE = getattr(settings, 'REACT_DEV_MODE', False)
 REACT_DEV_SERVER = getattr(settings, 'REACT_DEV_SERVER', 'http://localhost:3000/')
 
 '''
+Sample React Node Server Data:
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -53,9 +57,52 @@ REACT_DEV_SERVER = getattr(settings, 'REACT_DEV_SERVER', 'http://localhost:3000/
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <script src="/static/js/bundle.js"></script><script src="/static/js/0.chunk.js"></script><script src="/static/js/main.chunk.js"></script><script src="/main.1f54ed002f058a14d437.hot-update.js"></script></body>
+    <script src="/static/js/bundle.js"></script>
+    <script src="/static/js/0.chunk.js"></script>
+    <script src="/static/js/main.chunk.js"></script>
+    <script src="/main.1f54ed002f058a14d437.hot-update.js"></script>
+  </body>
 </html>
 '''
+
+class ReactHTMLParser(HTMLParser):
+    '''
+    This is a very targeted to extract what is needed when developing a hybrid app.
+    '''
+    in_head = False
+    in_body = False
+    data = { 'react_scripts':[], 'react_manifest':None }
+
+    def handle_starttag(self, tag, attrs):
+
+        if tag == "head":
+            self.in_head = True
+
+        if tag == "body":
+            self.in_body = True
+
+        if tag == "script" and self.in_body:     # Extract the Script Tags
+            for attr in attrs:
+                if attr[0] == 'src':
+                    self.data['react_scripts'].append(attr[1][1:])  # Strips off the leading "/"
+
+        if tag == "link" and self.in_head:     # Extract the Manifest Tags
+            manifest_tag = False
+            for attr in attrs:
+                if manifest_tag and attr[0] == 'href':
+                    self.data['react_manifest'] = attr[1][1:]       # Strips off the leading "/"
+                    manifest_tag = False
+                if attr[0] == 'rel' and attr[1] == 'manifest':
+                    manifest_tag = True
+
+    def handle_endtag(self, tag):
+
+        if tag == "head":
+            self.in_head = False
+
+        if tag == "body":
+            self.in_body = False
+
 
 #--------------
 # MIXINS
@@ -64,6 +111,7 @@ REACT_DEV_SERVER = getattr(settings, 'REACT_DEV_SERVER', 'http://localhost:3000/
 class ReactProxyMixin(object):
 
     react_dev_server = REACT_DEV_SERVER
+    react_proxy_reverse_name = 'reacttools-proxy'
     react_scripts = []
     react_styles = []
     react_manifest = None
@@ -74,9 +122,15 @@ class ReactProxyMixin(object):
 
         if REACT_DEV_MODE:
             # Query the server for the scripts to proxy
-            kwargs['react_styles'] = [ reverse_lazy( 'reacttools-proxy', args=(s,) ) for s in ['static/css/main.chunk.css'] ]
-            kwargs['react_scripts'] = [ reverse_lazy( 'reacttools-proxy', args=(p,) ) for p in ['static/js/bundle.js', 'static/js/0.chunk.js', 'static/js/main.chunk.js'] ]
-            kwargs['react_manifest'] = reverse_lazy( 'reacttools-proxy', args=('manifest.json', ) )
+            response = requests.get(REACT_DEV_SERVER)
+            content = engines['django'].from_string(response.text).render()
+            
+            parser = ReactHTMLParser()
+            parser.feed(content)
+
+            kwargs['react_styles'] = []
+            kwargs['react_scripts'] = [ reverse_lazy( self.react_proxy_reverse_name, args=(p,) ) for p in parser.data['react_scripts'] ]
+            kwargs['react_manifest'] = reverse_lazy( self.react_proxy_reverse_name, args=(parser.data['react_manifest'], ) )
         else:
             kwargs['react_scripts'] = [ static(s) for s in self.react_scripts ]
             kwargs['react_styles'] = [ static(s) for s in self.react_styles ]
