@@ -62,6 +62,68 @@ If you want to skip the build you can run the comman this way:
    > ./manage.py collectreact --no-build
    
 
+Views & Proxy
+-------------
+
+There are a couple of helpers for working with React running inside of a Django rendered page, refered to as a Hybrid App.
+
+To work with this we need include two more variables to help enable the features.
+
+.. code:: bash
+
+    REACT_DEV_SERVER = 'http://localhost:3000/'
+    REACT_DEV_MODE = True
+
+The REACT_DEV_SERVER defaults to 'http://localhost:3000/' so you only need to include it if you are using a different address and port.
+
+Setting REACT_DEV_MODE to True tells the ReactProxyMixin to use the proxy (REACT_DEV_SERVER) for finding the scripts instead of using the ones provided to a View using ReactProxyMixin in production.
+
+To make this all work in development, we end up proxying the JavaScript and manifest files through the Django Project from the Node Server.  We do this so the App is loaded in the page's context while still letting the developer stay in managed mode from create-react-app so they can nearly hot-load their changes.
+
+.. code:: python
+
+    path('reacttools/', include('reacttools.urls'))
+
+If you have a view that is hosting the Hybrid App, it's easiest to use a Generic Class Based View with the ReactProxyMixin also inherited.
+
+.. code:: python
+
+    class MyReactAppView(ReactProxyMixin, TemplateView):
+        template_name = "reactapp/react_app_view.html"
+        react_scripts = ['js/bundle.js', 'js/0.chunk.js', 'js/main.chunk.js']    # These are the production scripts
+        react_styles = []
+
+In the above example, the react_scripts would be the scripts used in production.  When you have REACT_DEV_MODE = True set, these are ignored and the mixin will query the server to get a list of JS files.
+
+To make this all show up properly, you will want to include these tags in your template.
+
+Put these in the <head> to make sure to get the manifest and and CSS files.
+
+.. code:: python
+
+    {% if react_manifest %}
+        <link rel="manifest" href="{{ react_manifest }}">
+    {% endif %}
+
+    {% for css in react_styles %}
+    <link href="{{ css }}" rel="stylesheet">
+    {% endfor %}
+
+Put this at the bottom of your body, near the closing tag to include the JS files.
+
+.. code:: python
+
+    {% for js in react_scripts %}
+    <script src="{{ js }}"></script>
+    {% endfor %}
+
+In case the proxy's resource name (URL / named path) is different than the default, the Attribute on ReactProxyMixin can be changed to reflect the new name.  The default is 'reacttools-proxy'.
+
+.. code:: python
+
+    react_proxy_reverse_name = 'reacttools-proxy'
+
+
 Indices and tables
 ==================
 

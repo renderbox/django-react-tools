@@ -110,8 +110,8 @@ class ReactHTMLParser(HTMLParser):
 
 class ReactProxyMixin(object):
 
-    react_dev_server = REACT_DEV_SERVER
-    react_proxy_reverse_name = 'reacttools-proxy'
+    react_dev_server = REACT_DEV_SERVER       # todo: Figure out way to support different servers at the same time in the proxy
+    react_proxy_resource_name = 'reacttools-proxy'
     react_scripts = []
     react_styles = []
     react_manifest = None
@@ -122,15 +122,15 @@ class ReactProxyMixin(object):
 
         if REACT_DEV_MODE:
             # Query the server for the scripts to proxy
-            response = requests.get(REACT_DEV_SERVER)
+            response = requests.get(self.react_dev_server)
             content = engines['django'].from_string(response.text).render()
             
             parser = ReactHTMLParser()
             parser.feed(content)
 
             kwargs['react_styles'] = []
-            kwargs['react_scripts'] = [ reverse_lazy( self.react_proxy_reverse_name, args=(p,) ) for p in parser.data['react_scripts'] ]
-            kwargs['react_manifest'] = reverse_lazy( self.react_proxy_reverse_name, args=(parser.data['react_manifest'], ) )
+            kwargs['react_scripts'] = [ reverse_lazy( self.react_proxy_resource_name, args=(p,) ) for p in parser.data['react_scripts'] ]
+            kwargs['react_manifest'] = reverse_lazy( self.react_proxy_resource_name, args=(parser.data['react_manifest'], ) )
         else:
             kwargs['react_scripts'] = [ static(s) for s in self.react_scripts ]
             kwargs['react_styles'] = [ static(s) for s in self.react_styles ]
@@ -142,9 +142,9 @@ class ReactProxyMixin(object):
 # VIEWS
 #--------------
 
-def proxy(request, path, upstream=REACT_DEV_SERVER):
+def proxy(request, path):
     '''
-    Based on the tutorial from Aymeric Augustin
+    Based on the guide from Aymeric Augustin
     https://fractalideas.com/blog/making-react-and-django-play-well-together-hybrid-app-model/    
     '''
     print("PROXY-ING: %s" % (REACT_DEV_SERVER + path) )
@@ -174,7 +174,7 @@ def proxy(request, path, upstream=REACT_DEV_SERVER):
             reason=response.reason,
         )
 
-    # //set headers to NOT cache a page
+    # set headers to NOT cache so the scripts are always live
     # header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
     # header("Pragma: no-cache"); //HTTP 1.0
     # header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
