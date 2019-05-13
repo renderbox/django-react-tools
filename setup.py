@@ -37,6 +37,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "Django>=2.1,<2.2",
+        "lxml>=4.3,<4.4"
         ],
     extras_require={
         'dev': [],
