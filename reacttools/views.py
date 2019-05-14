@@ -41,8 +41,6 @@ Sample React Node Server Data:
     <title>React App</title>
   </head>
   <body>
-    <!-- <script>window._apiHostname = 'http://localhost:8000';</script>
-    <script>window._imageUploadHostname = 'http://172.30.202.141:8000';</script> -->
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
@@ -125,6 +123,8 @@ class ReactProxyMixin(object):
             response = requests.get(self.react_dev_server)
             content = engines['django'].from_string(response.text).render()
             
+            # print(content)
+
             parser = ReactHTMLParser()
             parser.feed(content)
 
@@ -155,6 +155,8 @@ def proxy(request, path):
     
     response = requests.get(REACT_DEV_SERVER + path)
     content_type = response.headers.get('Content-Type')
+
+    # print(request.META)
 
     if request.META.get('HTTP_UPGRADE', '').lower() == 'websocket':
         return http.HttpResponse(
