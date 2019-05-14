@@ -151,7 +151,9 @@ def proxy(request, path):
     Based on the guide from Aymeric Augustin
     https://fractalideas.com/blog/making-react-and-django-play-well-together-hybrid-app-model/    
     '''
-    print("PROXY-ING: %s" % (REACT_DEV_SERVER + path) )
+
+    if settings.DEBUG:
+        print("PROXY-ING: %s" % (REACT_DEV_SERVER + path) )     # todo: move to logger?
     
     response = requests.get(REACT_DEV_SERVER + path)
     content_type = response.headers.get('Content-Type')
