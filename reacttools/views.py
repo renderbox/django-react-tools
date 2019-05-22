@@ -175,7 +175,7 @@ def proxy(request, path):
         )
 
     else:
-        result = http.StreamingHttpResponse(
+        return http.StreamingHttpResponse(
             streaming_content=response.iter_content(2 ** 12),
             content_type=content_type,
             status=response.status_code,
