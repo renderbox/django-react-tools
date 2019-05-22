@@ -131,7 +131,13 @@ class Command(BaseCommand):
 
         # FORCE FILES TO BE IN APROPRIATE DIRECTORIES? (for example: 'service-worker.js', 'precache-manifest.js' default to static root)
 
-        result = os.path.abspath(os.path.join( REACT_DJANGO_DEST, *path_parts ))
+        dest_path = os.path.abspath(REACT_DJANGO_DEST)
+
+        # MAKE SURE THE REACT_DJANGO_DEST PATH EXISTS...
+        if not os.path.exists(dest_path):
+            os.mkdir(dest_path)
+
+        result = os.path.join( dest_path, *path_parts )
 
         return result
 
