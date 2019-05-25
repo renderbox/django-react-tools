@@ -75,7 +75,13 @@ class Command(BaseCommand):
         with open(asset_manifest) as json_file:  
             manifest = json.load(json_file)
 
-        for key, value in manifest.items():
+        if 'files' in manifest:
+            # Added to address the file change with the asset-manifest file structure
+            files = manifest['files'].items()
+        else:
+            files = manifest.items()
+
+        for key, value in files:
 
             if key.split(".")[-1] in REACT_FILE_TYPES:
                 # print(key)
