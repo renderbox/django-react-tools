@@ -122,3 +122,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+REACT_PROJECT_DIRECTORY = os.path.join(BASE_DIR, '../react-test-app')
+REACT_BUILD_COMMAND = 'npm run build'
+REACT_DJANGO_DEST = os.path.join(BASE_DIR, 'static_react')
+
+REACT_DEV_SERVER = 'http://localhost:3000/'
+REACT_DEV_MODE = True
+
