@@ -39,7 +39,9 @@ setup(
         "Django>=2.1,<2.2",
         ],
     extras_require={
-        'dev': [],
+        'dev': [
+            'django-cors-headers==3.0.2',
+        ],
         'test': [],
         'prod': [],
         'build': [],
