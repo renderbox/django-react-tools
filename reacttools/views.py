@@ -160,12 +160,13 @@ def proxy(request, path):
 
     # print(request.META)
 
-    if request.META.get('HTTP_UPGRADE', '').lower() == 'websocket':
-        return http.HttpResponse(
-            content="WebSocket connections aren't supported",
-            status=501,
-            reason="Not Implemented"
-        )
+    if request.META.get('HTTP_UPGRADE', '').lower() == 'websocket':     # REDIRECT TO NODE SERVER
+        # return http.HttpResponse(
+        #     content="WebSocket connections aren't supported",
+        #     status=501,
+        #     reason="Not Implemented"
+        # )
+        return http.HttpResponseRedirect(REACT_DEV_SERVER + path)  # This might work
 
     elif content_type == 'text/html; charset=UTF-8':
         result = http.HttpResponse(
