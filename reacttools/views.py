@@ -106,6 +106,39 @@ class ReactHTMLParser(HTMLParser):
 # MIXINS
 #--------------
 
+
+class ReactEmbedMixin(object):
+
+    react_dev_server = REACT_DEV_SERVER       # todo: Figure out way to support different servers at the same time in the proxy
+    react_proxy_resource_name = 'reacttools-proxy'
+    react_scripts = []
+    react_styles = []
+    react_manifest = None
+
+    def get_context_data(self, **kwargs):
+
+        kwargs = super().get_context_data(**kwargs)
+
+        if REACT_DEV_MODE:
+            # Query the server for the scripts to proxy
+            response = requests.get(self.react_dev_server)
+            content = engines['django'].from_string(response.text).render()
+            
+            parser = ReactHTMLParser()
+            parser.feed(content)
+
+            kwargs['react_styles'] = []
+            kwargs['react_scripts'] = ["%s%s" % (self.react_dev_server, p) for p in parser.data['react_scripts'] ]
+            kwargs['react_manifest'] = "%s%s" % (self.react_dev_server, parser.data['react_manifest'])
+        else:
+            kwargs['react_scripts'] = [ static(s) for s in self.react_scripts ]
+            kwargs['react_styles'] = [ static(s) for s in self.react_styles ]
+            kwargs['react_manifest'] = self.react_manifest
+
+        return kwargs
+
+
+
 class ReactProxyMixin(object):
 
     react_dev_server = REACT_DEV_SERVER       # todo: Figure out way to support different servers at the same time in the proxy
@@ -142,7 +175,7 @@ class ReactProxyMixin(object):
 # VIEWS
 #--------------
 
-class IndexView(ReactProxyMixin, TemplateView):
+class IndexView(ReactEmbedMixin, TemplateView):
     template_name = "reacttools/index.html"
 
 
