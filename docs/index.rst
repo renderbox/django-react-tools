@@ -62,8 +62,10 @@ If you want to skip the build you can run the comman this way:
    > ./manage.py collectreact --no-build
    
 
-Views & Proxy
--------------
+Experimental Features
+---------------------
+
+These features are a work in progress and do have some small known issues (like hot reload on Dev Server can lead to multiple reloads of JS files).  If you have a suggestion on how to better aproach them, I'd love to hear from you.
 
 There are a couple of helpers for working with React running inside of a Django rendered page, refered to as a Hybrid App.
 
