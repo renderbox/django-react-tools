@@ -32,7 +32,6 @@ REACT_MANIFEST_FILE = getattr(settings, 'REACT_MANIFEST_FILE', "asset-manifest.j
 class Command(BaseCommand):
 
     help = "Collects the static files generated from a React project and moves them to the project's static directory"
-    debug = True
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -84,7 +83,6 @@ class Command(BaseCommand):
         for key, value in files:
 
             if key.split(".")[-1] in REACT_FILE_TYPES:
-                # print(key)
                 relative_value = value[1:]
                 source = os.path.abspath(os.path.join( REACT_BUILD_DIRECTORY, relative_value ))
                 dest = self.destination_path(relative_value)
@@ -102,17 +100,7 @@ class Command(BaseCommand):
                 if not os.path.isdir(dest_folder):
                     os.mkdir(dest_folder)
 
-                # Check to see if this is a file type that should be edited
-                # if source.split(".")[-1] not in ['js', 'css', 'map']:
                 subprocess.run("cp %s %s" % (source, dest), shell=True)
-                # else:
-                #     with open(source, 'r') as file :
-                #         filedata = file.read()
-
-                #     # filedata = filedata.replace('ram', 'abcd')    # Do this for each 
-
-                #     with open(dest, 'w') as file:
-                #         file.write(filedata)
             
                 
     def destination_path(self, file_path):
@@ -154,7 +142,7 @@ class Command(BaseCommand):
         if len(parts) > 2:
             junk = parts.pop(1)
 
-            if self.debug:
+            if settings.DEBUG:
                 print("Removing '%s' from '%s'" % (junk, file_name) )
 
         return ".".join(parts)

@@ -9,6 +9,7 @@ from django.template import engines
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from html.parser import HTMLParser
+from reacttools.models import ReactAppSettings
 
 REACT_DEV_MODE = getattr(settings, 'REACT_DEV_MODE', False)
 REACT_DEV_SERVER = getattr(settings, 'REACT_DEV_SERVER', 'http://localhost:3000/')
@@ -110,10 +111,7 @@ class ReactHTMLParser(HTMLParser):
 class ReactEmbedMixin(object):
 
     react_dev_server = REACT_DEV_SERVER       # todo: Figure out way to support different servers at the same time in the proxy
-    react_proxy_resource_name = 'reacttools-proxy'
-    react_scripts = []
-    react_styles = []
-    react_manifest = None
+    react_settings = None
 
     def get_context_data(self, **kwargs):
 
@@ -131,9 +129,10 @@ class ReactEmbedMixin(object):
             kwargs['react_scripts'] = ["%s%s" % (self.react_dev_server, p) for p in parser.data['react_scripts'] ]
             kwargs['react_manifest'] = "%s%s" % (self.react_dev_server, parser.data['react_manifest'])
         else:
-            kwargs['react_scripts'] = [ static(s) for s in self.react_scripts ]
-            kwargs['react_styles'] = [ static(s) for s in self.react_styles ]
-            kwargs['react_manifest'] = self.react_manifest
+            config = ReactAppSettings.object.get(slug=self.react_settings)
+            kwargs['react_scripts'] = config.js_paths()
+            kwargs['react_styles'] = config.css_paths()
+            kwargs['react_manifest'] = config.manifest
 
         return kwargs
 
@@ -143,9 +142,7 @@ class ReactProxyMixin(object):
 
     react_dev_server = REACT_DEV_SERVER       # todo: Figure out way to support different servers at the same time in the proxy
     react_proxy_resource_name = 'reacttools-proxy'
-    react_scripts = []
-    react_styles = []
-    react_manifest = None
+    react_settings = None
 
     def get_context_data(self, **kwargs):
 
@@ -156,8 +153,6 @@ class ReactProxyMixin(object):
             response = requests.get(self.react_dev_server)
             content = engines['django'].from_string(response.text).render()
             
-            # print(content)
-
             parser = ReactHTMLParser()
             parser.feed(content)
 
@@ -165,9 +160,10 @@ class ReactProxyMixin(object):
             kwargs['react_scripts'] = [ reverse_lazy( self.react_proxy_resource_name, args=(p,) ) for p in parser.data['react_scripts'] ]
             kwargs['react_manifest'] = reverse_lazy( self.react_proxy_resource_name, args=(parser.data['react_manifest'], ) )
         else:
-            kwargs['react_scripts'] = [ static(s) for s in self.react_scripts ]
-            kwargs['react_styles'] = [ static(s) for s in self.react_styles ]
-            kwargs['react_manifest'] = self.react_manifest
+            config = ReactAppSettings.object.get(slug=self.react_settings)
+            kwargs['react_scripts'] = config.js_paths()
+            kwargs['react_styles'] = config.css_paths()
+            kwargs['react_manifest'] = config.manifest
 
         return kwargs
 

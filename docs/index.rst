@@ -18,7 +18,7 @@ To start run
 
    pip install django-react-tools
 
-then add ‘reacttools’ to your django project’s list of apps.
+then add ‘reacttools’ & 'django.contrib.sites' to your django project’s list of apps.
 
 next in settings, set where to find the React project:
 
