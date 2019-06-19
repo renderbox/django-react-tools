@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 dest_folder = os.path.dirname(dest)
 
                 if not os.path.isdir(dest_folder):
-                    os.mkdir(dest_folder)
+                    os.makedirs(dest_folder, exist_ok=True)
 
                 subprocess.run("cp %s %s" % (source, dest), shell=True)
             

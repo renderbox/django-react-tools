@@ -20,12 +20,6 @@ To start run
 
 then add ‘reacttools’ & 'django.contrib.sites' to your django project’s list of apps.
 
-next in settings, set where to find the React project:
-
-.. code:: python
-
-   REACT_PROJECT_DIRECTORY = "/path/to/project"
-
 The default destination location is the Static Root directory for your
 Django project. You can change it by modifying the setting variable.
 
@@ -41,6 +35,41 @@ using a newer version of React (16.8+) you will want to change this value to
 
    REACT_MANIFEST_FILE = "asset-manifest.json"
 
+By default the React project is buit using “yarn build”. If you want to
+change the command you can:
+
+.. code:: python
+
+   REACT_BUILD_COMMAND = "npm build"
+
+**Updated in v0.2.0**
+
+Starting with v0.2.0 much of the configuration has been moved into Django models.  This is so we can support multiple React projects within the same Django Project.
+
+To create the configurations, you need first migrate to create the tables:
+
+.. code:: python
+
+   ./manage.py migrate
+
+In the admin panel, navigate to ReactTools > ReactAppSettings.
+
+Here, create a new React App Settings record.  The only two required fields are the "React App Name" and "Project Dir".  
+
+It's also reconmended that you make sure the settings are set to 'enabled'.  This allows the 'collectreact' management command know which apps to look for.
+
+After you save your React App Settings, you will notice at the bottom of the page, the slug field.  You will need this for your view class that hosts your app.
+
+The next step is to place the 'ReactEmbedMixin' view to the view controlling your React app.  In there add the attribute: react_settings = "react-app-slug" to the view class.  Notice that the value is for the slug from the model.  This is so the view knows which React app to use.
+
+.. code:: python
+    
+    from reacttools.views import ReactProxyMixin
+    
+    class MyAppView(ReactProxyMixin, TemplateView):
+        template_name = "myapp/template.html"
+        react_settings = "react-app-slug"
+
 
 To run all you need to do is call the management command.
 
@@ -48,12 +77,7 @@ To run all you need to do is call the management command.
 
    > ./manage.py collectreact
 
-By default the React project is buit using “yarn build”. If you want to
-change the command you can:
-
-.. code:: python
-
-   REACT_BUILD_COMMAND = "npm build"
+This will find all the enabled react app settings and run the processing for each.
 
 If you want to skip the build you can run the comman this way:
 
