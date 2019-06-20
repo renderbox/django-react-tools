@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
 REACT_MANIFEST_FILE = getattr(settings, 'REACT_MANIFEST_FILE', "asset-manifest.json")
+REACT_BUILD_COMMAND = getattr(settings, 'REACT_BUILD_COMMAND', "npm run build")
 
 class ReactAppSettings(models.Model):
 
@@ -15,7 +16,7 @@ class ReactAppSettings(models.Model):
     css_data = models.TextField(blank=True)
     static_path_prefix = models.CharField(max_length=128, blank=True, help_text="Tells collectreact wether or not to insert an extra directory into the static file path (i.e. js/prefix/main.chunk.js).  Blank is no prefix.")
     manifest = models.CharField(max_length=128, blank=True, help_text="Defaults to '%s' from the REACT_MANIFEST_FILE value in settings.py." % (REACT_MANIFEST_FILE) )
-    build_cmd = models.CharField(max_length=128, blank=True, help_text="Defaults to '%s' from the REACT_BUILD_COMMAND value in settings.py." % (settings.REACT_BUILD_COMMAND) )
+    build_cmd = models.CharField(max_length=128, blank=True, help_text="Defaults to '%s' from the REACT_BUILD_COMMAND value in settings.py." % (REACT_BUILD_COMMAND) )
     project_dir = models.CharField(max_length=128, help_text="This can be a relative path and will be expanded on use.")
     build_dir = models.CharField(max_length=128, blank=True, help_text="Default assumes that the build path is at the root of the project (i.e. project_dir/build/).")
     enabled = models.BooleanField(_("Enabled"), default=False)      # Is this location available?
