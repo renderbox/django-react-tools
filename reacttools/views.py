@@ -160,7 +160,7 @@ class ReactProxyMixin(object):
             kwargs['react_scripts'] = [ reverse_lazy( self.react_proxy_resource_name, args=(p,) ) for p in parser.data['react_scripts'] ]
             kwargs['react_manifest'] = reverse_lazy( self.react_proxy_resource_name, args=(parser.data['react_manifest'], ) )
         else:
-            config = ReactAppSettings.object.get(slug=self.react_settings)
+            config = ReactAppSettings.objects.get(slug=self.react_settings)
             kwargs['react_scripts'] = config.js_paths()
             kwargs['react_styles'] = config.css_paths()
             kwargs['react_manifest'] = config.manifest
