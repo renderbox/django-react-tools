@@ -199,19 +199,22 @@ class IndexView(ReactEmbedMixin, TemplateView):
 
 class ReactAppView(TemplateView):
     '''
-    Simple view for serving React apps.
+    View for serving React apps using the App config model.
     '''
-    template_name = "reactapp/react_app_view.html"
-    # react_scripts = ['js/runtime~main.js', 'js/2.chunk.js', 'js/main.chunk.js']    # These are the production scripts
-    # react_styles = ['css/1.chunk.css', 'css/2.chunk.css', 'css/main.chunk.css']
+    template_name = "reacttools/react_app_view.html"
     react_settings = "react-app"
-
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['js_debug'] = settings.REACT_DEBUG
-        ctx['react_scripts'] = []
-        ctx['react_styles'] = []
+
+        ctx['react_root'] = "cms-tools"
+
+        config = ReactAppSettings.objects.get(slug=self.react_settings)
+        ctx['react_scripts'] = config.js_paths()
+        ctx['react_styles'] = config.css_paths()
+        ctx['react_manifest'] = config.manifest
+
         return ctx
 
 

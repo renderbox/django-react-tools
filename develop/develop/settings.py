@@ -25,6 +25,8 @@ SECRET_KEY = 'g!4l3do!i8h3p_c^u#-)8p1nm$5k57m4i14)x9l^ybxmu1+#_8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+REACT_DEBUG = os.getenv('REACT_DEBUG', DEBUG)
+
 ALLOWED_HOSTS = []
 
 # https://github.com/ottoyiu/django-cors-headers/#setup
@@ -59,7 +61,7 @@ ROOT_URLCONF = 'develop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ os.path.join(BASE_DIR, 'templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
