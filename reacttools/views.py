@@ -175,6 +175,53 @@ class IndexView(ReactEmbedMixin, TemplateView):
     template_name = "reacttools/index.html"
 
 
+# import requests
+# from django import http
+# from django.conf import settings
+# from django.template import engines
+# from django.shortcuts import render
+# from django.views.generic import TemplateView
+# from django.contrib.auth.mixins import LoginRequiredMixin
+
+#--------------
+# BASE VIEWS - Any base level views you will inherit in your views
+#--------------
+
+
+#--------------
+# MIXINS - Local Mixins that you create
+#--------------
+
+
+#--------------
+# VIEWS - Views for your app
+#--------------
+
+class ReactAppView(TemplateView):
+    '''
+    View for serving React apps using the App config model.
+    '''
+    template_name = "reacttools/react_app_view.html"
+    react_settings = "react-app"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['js_debug'] = settings.REACT_DEBUG
+
+        ctx['react_root'] = []
+        ctx['react_scripts'] = []
+        ctx['react_styles'] = []
+        ctx['react_manifest'] = []
+
+        for config in ReactAppSettings.objects.filter(slug=self.react_settings):
+            ctx['react_root'].append(config.react_root)
+            ctx['react_scripts'].extend(config.js_paths())
+            ctx['react_styles'].extend(config.css_paths())
+            ctx['react_manifest'].append(config.manifest)
+
+        return ctx
+
+
 def proxy(request, path):
     '''
     Based on the guide from Aymeric Augustin

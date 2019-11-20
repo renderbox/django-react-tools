@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}React Application{% endblock %}
+
+{% block extra_css %}
+
+{% for manifest in react_manifest %}
+	<link rel="manifest" href="{{ manifest }}">
+{% endfor %}
+
+{% for css in react_styles %}
+<link href="{{ css }}" rel="stylesheet">
+{% endfor %}
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block extra_head_js %}{% endblock %}
+
+{% block react %}
+	<noscript>{% trans 'You need to enable JavaScript to run this app.' %}</noscript>
+    {% for root in react_root %}
+	<div id="{{ root }}"></div>
+    {% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script>window._apiHostname = '{{ host_root }}';</script>
+<script>window._imageUploadHostname = '{{ media_host_root }}';</script>
+<script>window._jsdebug = '{{ js_debug }}';</script>
+
+{% for js in react_scripts %}
+<script src="{{ js }}"></script>
+{% endfor %}
+
+{% endblock %}

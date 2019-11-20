@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from reacttools.views import IndexView
+from reacttools.views import IndexView, ReactAppView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dev/', IndexView.as_view()),
     path('reacttools/', include('reacttools.urls')),
+    path('', ReactAppView.as_view()),
 ]
