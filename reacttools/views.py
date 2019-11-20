@@ -213,7 +213,7 @@ class ReactAppView(TemplateView):
         ctx['react_styles'] = []
         ctx['react_manifest'] = []
 
-        for item in ReactAppSettings.objects.filter(slug=self.react_settings)
+        for item in ReactAppSettings.objects.filter(slug=self.react_settings):
             ctx['react_root'].append(config.root_name)
             ctx['react_scripts'].extend(config.js_paths())
             ctx['react_styles'].extend(config.css_paths())
