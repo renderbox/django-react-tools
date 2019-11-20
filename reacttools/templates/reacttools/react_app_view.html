@@ -5,13 +5,15 @@
 {% block head_title %}React Application{% endblock %}
 
 {% block extra_css %}
-{% if react_manifest %}
-	<link rel="manifest" href="{{ react_manifest }}">
-{% endif %}
+
+{% for manifest in react_manifest %}
+	<link rel="manifest" href="{{ manifest }}">
+{% endfor %}
 
 {% for css in react_styles %}
 <link href="{{ css }}" rel="stylesheet">
 {% endfor %}
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
@@ -19,7 +21,9 @@
 
 {% block react %}
 	<noscript>{% trans 'You need to enable JavaScript to run this app.' %}</noscript>
-	<div id="{{ react_root }}"></div>
+    {% for root in react_root %}
+	<div id="{{ root }}"></div>
+    {% endfor %}
 {% endblock %}
 
 {% block extra_js %}
