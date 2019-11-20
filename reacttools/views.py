@@ -208,12 +208,16 @@ class ReactAppView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['js_debug'] = settings.REACT_DEBUG
 
-        ctx['react_root'] = "cms-tools"
+        ctx['react_root'] = []
+        ctx['react_scripts'] = []
+        ctx['react_styles'] = []
+        ctx['react_manifest'] = []
 
-        config = ReactAppSettings.objects.get(slug=self.react_settings)
-        ctx['react_scripts'] = config.js_paths()
-        ctx['react_styles'] = config.css_paths()
-        ctx['react_manifest'] = config.manifest
+        for item in ReactAppSettings.objects.filter(slug=self.react_settings)
+            ctx['react_root'].append(config.root_name)
+            ctx['react_scripts'].extend(config.js_paths())
+            ctx['react_styles'].extend(config.css_paths())
+            ctx['react_manifest'].append(config.manifest)
 
         return ctx
 
