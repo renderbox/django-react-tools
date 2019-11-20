@@ -19,6 +19,7 @@ class ReactAppSettings(models.Model):
     build_cmd = models.CharField(max_length=128, blank=True, help_text="Defaults to '%s' from the REACT_BUILD_COMMAND value in settings.py." % (REACT_BUILD_COMMAND) )
     project_dir = models.CharField(max_length=128, help_text="This can be a relative path and will be expanded on use.")
     build_dir = models.CharField(max_length=128, blank=True, help_text="Default assumes that the build path is at the root of the project (i.e. project_dir/build/).")
+    react_root = models.CharField(max_length=64, blank=True, default='root', help_text="Defaults the DIV id to 'root' for attaching the React App to." )
     enabled = models.BooleanField(_("Enabled"), default=False)      # Is this location available?
 
     def __str__(self):
