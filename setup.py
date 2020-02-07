@@ -36,7 +36,7 @@ setup(
     packages=find_packages(),
     python_requires=">=3.6",
     install_requires=[
-        "Django>=2.0",
+        "Django>=2.0,<3.0",     # Travis does not seem to have 3.0+ yet
         "requests",
         ],
     extras_require={
