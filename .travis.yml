@@ -1,11 +1,16 @@
 language: python
 python:
-  - "3.6"
-  - "3.7"
-  - "3.8"
+- '3.6'
+- '3.7'
+- '3.8'
 install:
-  - pip install -e .
-  - cd develop
-  - python manage.py migrate
+- pip install -e .
+- cd develop
+- python manage.py migrate
 script:
-  - python manage.py test reacttools
+- python manage.py test reacttools
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: fy8a7idpDgFXbChnIt1i2kK2b7ShStkMEmV22mltB/fQjH6DoKZ1nO937cMxsX1zwLMvA7uYZW6lxwjWoBZ81/k8znwLqTUFhDZY1XLv84jKdNHPjU9OKBKhOVjWP15eXFc9Z0bv7940TgQOr0FiJX50VTowMt1OLEv0aPYR5bH1J6XyhjzKepa7/3A7i3MSOO8wFL9nzeaXzpXceYnW+TjTJvpFcCr+XYBG+V2x24PBjgbmOiPJbmJoM03qOV5VZCagANl6XjQgRRlCH/Zw1n9R2GRTDAp/KEWrQii7KragUVRyDAWzXvQPin3Z//dMVMZTFAS0wZ0M6lu6j8JCwc43hiQxnphV5EPCqePoFgvSV0z+RF2PcsvF++f5xfCbKO8ppEHfxWC3fLJ/ufp5hpVUaDcwMh33Y9OovbmLCASF2bw46P/LM9dLgtg8QNToG2EX+z4vQLjDxfwupLZ2IGfdIXQQX5QNssU/vX5PSL8FohYaSPdpvPGKW7FjEN8j2NE+aH5R9SnjvWXdReR3i1kuBeHB3pMfhkAGZHOtsgQT3wsj2FMzpLjazX7seGFsqCj16HLDRzhi175jGoV6WXTkDUEKHgZYrhc2DD307gvqI9HVr7vCFh5FDVjRMFgPTGTJvUvIr3YNuk8OXIRfAqfQJyVQGlGu5pgmtoRjDxk=
