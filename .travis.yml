@@ -9,6 +9,7 @@ install:
 - python manage.py migrate
 script:
 - python manage.py test reacttools
+- cd ..
 deploy:
   provider: pypi
   user: __token__
