@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 from django.utils.text import slugify
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 
 REACT_MANIFEST_FILE = getattr(settings, 'REACT_MANIFEST_FILE', "asset-manifest.json")
 REACT_BUILD_COMMAND = getattr(settings, 'REACT_BUILD_COMMAND', "npm run build")

@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.template import engines
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 
 from html.parser import HTMLParser
 from reacttools.models import ReactAppSettings
