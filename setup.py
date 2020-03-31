@@ -13,7 +13,7 @@ with open(path.join(file_path, 'README.md'), encoding='utf-8') as f:
 
 package_metadata = {
     'name': 'django-react-tools',
-    'version': '0.2.8',
+    'version': '0.2.9',
     'description': 'Tools for helping integrate ReactJS into a Django project.',
     'long_description': long_description,
     'url': 'https://github.com/renderbox/django-react-tools',
