@@ -42,12 +42,17 @@ class Command(BaseCommand):
             '-n', '--dry-run', action='store_true',
             help="Do everything except modify the filesystem.",
         )
+        parser.add_argument(
+            '--no-delete', action='store_true', dest='no_delete',
+            help="Don't delete files in the destination directory before copying new ones.",
+        )
 
     def set_options(self, **options):
         """
         Set instance variables based on an options dict
         """
         self.nobuild = options['no_build']
+        self.nodelete = options['no_delete']
 
     def handle(self, *args, **options):
         self.set_options(**options)
@@ -70,8 +75,8 @@ class Command(BaseCommand):
             print('returncode:', completed.returncode)
 
         asset_manifest = os.path.join(REACT_BUILD_DIRECTORY, REACT_MANIFEST_FILE)
-        
-        with open(asset_manifest) as json_file:  
+
+        with open(asset_manifest) as json_file:
             manifest = json.load(json_file)
 
         if 'files' in manifest:
@@ -79,6 +84,27 @@ class Command(BaseCommand):
             files = manifest['files'].items()
         else:
             files = manifest.items()
+
+        for key, value in files:
+
+            if key.split(".")[-1] in REACT_FILE_TYPES:
+                relative_value = value[1:]
+                dest = self.destination_path(relative_value)
+
+                if dest == None:    # If the destination is not valid, it will return None
+                    continue
+
+                # Check the destination folder exists
+                dest_folder = os.path.dirname(dest)
+
+                if not os.path.isdir(dest_folder):
+                    os.makedirs(dest_folder, exist_ok=True)
+                else:
+                    if self.nodelete:
+                        print("Skipping delete of files in destination directory(s)")
+                    else:
+                        print("Deleting existing files in: %s" % (dest_folder) )
+                        subprocess.run("rm %s/*" % (dest_folder), shell=True)
 
         for key, value in files:
 
@@ -94,18 +120,12 @@ class Command(BaseCommand):
                 # Copy the files here and overwrite the old files
                 # modify any text files here
 
-                # Check the destination folder exists
-                dest_folder = os.path.dirname(dest)
-
-                if not os.path.isdir(dest_folder):
-                    os.makedirs(dest_folder, exist_ok=True)
-
                 subprocess.run("cp %s %s" % (source, dest), shell=True)
-            
-                
+
+
     def destination_path(self, file_path):
         '''
-        Returns the destination path or None.  If it's None, that means 
+        Returns the destination path or None.  If it's None, that means
         the path is invalid and should be skipped.
         '''
 
