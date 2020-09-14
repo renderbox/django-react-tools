@@ -1,3 +1,5 @@
+![Upload Python Package](https://github.com/renderbox/django-react-tools/workflows/Upload%20Python%20Package/badge.svg)
+
 # django-react-tools
 Tools for helping integrate ReactJS into a Django project.
 
