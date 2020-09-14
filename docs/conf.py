@@ -27,7 +27,7 @@ project = 'Django React Tools'
 author = 'Grant Viklund'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.11'
+release = '0.2.12'
 
 # -- General configuration ------------------------------------------------
 
