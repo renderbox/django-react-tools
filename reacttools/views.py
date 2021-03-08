@@ -125,14 +125,21 @@ class ReactEmbedMixin(object):
             parser = ReactHTMLParser()
             parser.feed(content)
 
+            kwargs['react_root'] = []
             kwargs['react_styles'] = []
             kwargs['react_scripts'] = ["%s%s" % (self.react_dev_server, p) for p in parser.data['react_scripts'] ]
             kwargs['react_manifest'] = "%s%s" % (self.react_dev_server, parser.data['react_manifest'])
-        else:
-            config = ReactAppSettings.object.get(slug=self.react_settings)
-            kwargs['react_scripts'] = config.js_paths()
-            kwargs['react_styles'] = config.css_paths()
-            kwargs['react_manifest'] = config.manifest
+        else:        
+            kwargs['react_root'] = []
+            kwargs['react_scripts'] = []
+            kwargs['react_styles'] = []
+            kwargs['react_manifest'] = []
+
+            for config in ReactAppSettings.objects.filter(slug=self.react_settings):
+                kwargs['react_root'].append(config.react_root)
+                kwargs['react_scripts'].extend(config.js_paths())
+                kwargs['react_styles'].extend(config.css_paths())
+                kwargs['react_manifest'].append(config.manifest)
 
         return kwargs
 
