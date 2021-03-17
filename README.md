@@ -1,9 +1,11 @@
+![Upload Python Package](https://github.com/renderbox/django-react-tools/workflows/Upload%20Python%20Package/badge.svg)
+
 # django-react-tools
 Tools for helping integrate ReactJS into a Django project.
 
 The current iteration of this tool adds a simple management command to your Django project that will build, copy to a Django static directory and rename accordingly.
 
-
+If you wish to contribute, please Fork the repo and then make a Pull Request.  We're always open for people who want to help make this a better package.
 
 To start run 
 
