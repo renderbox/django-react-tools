@@ -36,7 +36,7 @@ setup(
     packages=find_packages(),
     python_requires=">=3.6",
     install_requires=[
-        'Django>=2.1',
+        'Django>=2.1,<4.1',
         "requests",
         ],
     extras_require={
