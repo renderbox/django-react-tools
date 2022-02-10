@@ -76,20 +76,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'develop.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": os.getenv('PSQL_NAME', "reacttools"),
-#         "USER": os.getenv('PSQL_USER', "django"),
-#         "PASSWORD": os.getenv('PSQL_PASSWORD', "password"),
-#         "HOST": os.getenv('PSQL_HOST', "localhost"),
-#         "PORT": os.getenv('PSQL_PORT', ""),
-#     }
-# }
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DATABASES = {
     'default': {
