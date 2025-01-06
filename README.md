@@ -15,3 +15,7 @@ pip install django-react-tools
 To read more about how to configure the project, go to the docs [here](https://github.com/renderbox/django-react-tools/blob/master/docs/index.md).
 
 We are in the process of making some updates to the package. If you come accross any issues please report them.
+
+[![Python Tests](https://github.com/renderbox/django-react-tools/actions/workflows/python-test.yml/badge.svg)](https://github.com/renderbox/django-react-tools/actions/workflows/python-test.yml)
+
+[![Upload Python Package](https://github.com/renderbox/django-react-tools/actions/workflows/python-publish.yml/badge.svg)](https://github.com/renderbox/django-react-tools/actions/workflows/python-publish.yml)
