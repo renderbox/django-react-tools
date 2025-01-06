@@ -65,7 +65,7 @@ jobs:
     name: >-
       Publish Python 🐍 distribution 📦 to PyPI
     needs:
-      - build
+      - bump-and-build
     runs-on: ubuntu-latest
     environment:
       name: pypi
