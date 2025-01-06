@@ -45,6 +45,8 @@ jobs:
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
+    # Only run this job when the `bump_version` job is successful
+    needs: bump_version
 
     steps:
       - uses: actions/checkout@v4
