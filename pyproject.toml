@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[project]
+name = "django-react-tools"
+version = "0.4.0"
+
+authors = [
+  { name="Grant Viklund", email="renderbox@gmail.com" },
+  { name="Devon Jackson"}
+]
+description = "Tools for helping integrate ReactJS into a Django project."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+keywords = ["django", "app"]
+dependencies = [
+    "Django>=4.1,<5.2",
+    "requests",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "flake8-black",
+    "mypy",
+    "bandit",
+    "isort",
+    "toml",
+]
+docs= [
+    "coverage",
+]
+test = [
+    "black",
+    "flake8",
+    "flake8-black",
+    "mypy",
+    "bandit",
+    "isort",
+    "coverage",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/renderbox/django-react-tools"
+"Bug Tracker" = "https://github.com/renderbox/django-react-tools/issues"

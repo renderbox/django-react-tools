@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0001_initial'),
+        ("reacttools", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reactappsettings',
-            name='css',
+            model_name="reactappsettings",
+            name="css",
             field=models.TextField(blank=True),
         ),
         migrations.AlterField(
-            model_name='reactappsettings',
-            name='js',
+            model_name="reactappsettings",
+            name="js",
             field=models.TextField(blank=True),
         ),
         migrations.AlterField(
-            model_name='reactappsettings',
-            name='manifest',
+            model_name="reactappsettings",
+            name="manifest",
             field=models.CharField(blank=True, max_length=128),
         ),
     ]
