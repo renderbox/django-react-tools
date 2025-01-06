@@ -79,7 +79,6 @@ jobs:
   publish-to-pypi:
     name: >-
       Publish Python 🐍 distribution 📦 to PyPI
-    if: ${{ github.ref_type == 'tag' }}
     needs:
       - build
     runs-on: ubuntu-latest
