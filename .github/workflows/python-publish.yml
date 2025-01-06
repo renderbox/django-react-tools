@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: current_version
+        run: echo "current_version=$(grep 'version = ' pyproject.toml | cut -d '=' -f2 | tr -d ' "')" >> $GITHUB_ENV
+
       - name: Install bump2version
         run: pip install bump2version
 
@@ -32,6 +35,9 @@ jobs:
           bump2version patch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: new_version
+        run: echo "new_version=$(grep 'version = ' pyproject.toml | cut -d '=' -f2 | tr -d ' "')" >> $GITHUB_ENV
 
       - name: Push changes
         run: |
@@ -46,7 +52,8 @@ jobs:
     name: Build distribution 📦
     runs-on: ubuntu-latest
     # Only run this job when the `bump_version` job is successful
-    needs: bump_version
+    needs:
+      - bump_version
 
     steps:
       - uses: actions/checkout@v4
