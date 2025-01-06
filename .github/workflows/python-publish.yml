@@ -25,6 +25,10 @@ jobs:
       - name: Bump version and commit changes
         run: |
           bump2version patch
+      - name: Push changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
           git push
           git push --tags
         env:
