@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0006_auto_20190612_2054'),
+        ("reacttools", "0006_auto_20190612_2054"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='reactappsettings',
-            old_name='css',
-            new_name='css_data',
+            model_name="reactappsettings",
+            old_name="css",
+            new_name="css_data",
         ),
         migrations.RenameField(
-            model_name='reactappsettings',
-            old_name='js',
-            new_name='js_data',
+            model_name="reactappsettings",
+            old_name="js",
+            new_name="js_data",
         ),
     ]

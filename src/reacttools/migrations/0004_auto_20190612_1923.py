@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0003_reactappsettings_build_path'),
+        ("reacttools", "0003_reactappsettings_build_path"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='reactappsettings',
-            old_name='build_path',
-            new_name='project_dir',
+            model_name="reactappsettings",
+            old_name="build_path",
+            new_name="project_dir",
         ),
     ]
