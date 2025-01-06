@@ -101,6 +101,13 @@ jobs:
           name: python-package-distributions
           path: dist/
 
+      # Extract the version directly from a built .whl file
+      - name: Extract version from Python package
+        id: get_version
+        run: |
+          VERSION=$(ls dist/*.whl | head -n 1 | sed -n 's/.*-\([0-9][^.-]*\).whl/\1/p')
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Sign the dists with Sigstore
         uses: sigstore/gh-action-sigstore-python@v2.1.1
         with:
@@ -113,9 +120,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           gh release create
-          '${{ github.ref_name }}'
+          "v${{ env.PACKAGE_VERSION }}"
           --repo '${{ github.repository }}'
-          --notes ""
+          --title "Release v${{ env.PACKAGE_VERSION }}"
+          --notes "Release for version ${{ env.PACKAGE_VERSION }}"
 
       - name: Upload artifact signatures to GitHub Release
         env:
@@ -125,5 +133,5 @@ jobs:
         # sigstore-produced signatures and certificates.
         run: >-
           gh release upload
-          '${{ github.ref_name }}' dist/**
+          "v${{ env.PACKAGE_VERSION }}" dist/**
           --repo '${{ github.repository }}'
