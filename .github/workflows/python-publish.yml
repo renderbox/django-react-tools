@@ -8,8 +8,8 @@ on:
     branches: [master]
 
 jobs:
-  bump_version:
-    name: Bump package version
+  bump and build:
+    name: Bump and Build the package version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,21 +46,6 @@ jobs:
           git commit -am "Bump version [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git --tags
-
-  build:
-    name: Build distribution 📦
-    runs-on: ubuntu-latest
-    # Only run this job when the `bump_version` job is successful
-    needs:
-      - bump_version
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
 
       - name: Install Dependencies
         run: |
