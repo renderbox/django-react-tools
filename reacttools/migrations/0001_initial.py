@@ -7,20 +7,34 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ReactAppSettings',
+            name="ReactAppSettings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='The React App name you want to use.', max_length=32, verbose_name='React App Name')),
-                ('slug', models.SlugField(max_length=32)),
-                ('js', models.TextField()),
-                ('css', models.TextField()),
-                ('manifest', models.CharField(max_length=128)),
-                ('enabled', models.BooleanField(default=False, verbose_name='Enabled')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="The React App name you want to use.",
+                        max_length=32,
+                        verbose_name="React App Name",
+                    ),
+                ),
+                ("slug", models.SlugField(max_length=32)),
+                ("js", models.TextField()),
+                ("css", models.TextField()),
+                ("manifest", models.CharField(max_length=128)),
+                ("enabled", models.BooleanField(default=False, verbose_name="Enabled")),
             ],
         ),
     ]

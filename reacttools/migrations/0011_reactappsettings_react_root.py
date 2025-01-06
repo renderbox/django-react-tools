@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0010_auto_20190612_2123'),
+        ("reacttools", "0010_auto_20190612_2123"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='reactappsettings',
-            name='react_root',
-            field=models.CharField(blank=True, default='root', help_text="Defaults the DIV id to 'root' for attaching the React App to.", max_length=64),
+            model_name="reactappsettings",
+            name="react_root",
+            field=models.CharField(
+                blank=True,
+                default="root",
+                help_text="Defaults the DIV id to 'root' for attaching the React App to.",
+                max_length=64,
+            ),
         ),
     ]

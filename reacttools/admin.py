@@ -6,8 +6,10 @@ from reacttools.models import ReactAppSettings
 # MODEL ADMINS
 ###############
 
+
 class ReactAppSettingsAdmin(admin.ModelAdmin):
-    readonly_fields = ('slug',)
+    readonly_fields = ("slug",)
+
 
 ###############
 # REGISTRATION

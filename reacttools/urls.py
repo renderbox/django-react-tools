@@ -3,5 +3,5 @@ from reacttools import views
 from django.conf import settings
 
 urlpatterns = [
-    re_path('proxy/(\w.+)$', views.proxy, name='reacttools-proxy'),
+    re_path("proxy/(\w.+)$", views.proxy, name="reacttools-proxy"),
 ]

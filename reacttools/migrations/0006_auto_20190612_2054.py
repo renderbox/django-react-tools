@@ -6,18 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0005_reactappsettings_build_cmd'),
+        ("reacttools", "0005_reactappsettings_build_cmd"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reactappsettings',
-            name='build_cmd',
-            field=models.CharField(blank=True, help_text="Defaults to 'npm run build' from the REACT_BUILD_COMMAND value in settings.py.", max_length=128),
+            model_name="reactappsettings",
+            name="build_cmd",
+            field=models.CharField(
+                blank=True,
+                help_text="Defaults to 'npm run build' from the REACT_BUILD_COMMAND value in settings.py.",
+                max_length=128,
+            ),
         ),
         migrations.AlterField(
-            model_name='reactappsettings',
-            name='manifest',
-            field=models.CharField(blank=True, help_text="Defaults to 'asset-manifest.json' from the REACT_MANIFEST_FILE value in settings.py.", max_length=128),
+            model_name="reactappsettings",
+            name="manifest",
+            field=models.CharField(
+                blank=True,
+                help_text="Defaults to 'asset-manifest.json' from the REACT_MANIFEST_FILE value in settings.py.",
+                max_length=128,
+            ),
         ),
     ]

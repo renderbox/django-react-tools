@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reacttools', '0004_auto_20190612_1923'),
+        ("reacttools", "0004_auto_20190612_1923"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='reactappsettings',
-            name='build_cmd',
+            model_name="reactappsettings",
+            name="build_cmd",
             field=models.CharField(blank=True, max_length=128),
         ),
     ]
